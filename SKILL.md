@@ -1,198 +1,153 @@
 ---
 name: frontend-development
-description: Guide and implement frontend project setup, module creation, page/component development, API integration, mock support, and verification in this repository. Use this whenever the user asks to create or extend frontend features, scaffold pages/components/routes/store/api files, build CRUD forms, wire existing backend endpoints, add frontend validation, or explain how to start a new frontend module in the current Vue 3 + Vite + Element Plus + Avue stack, even if they only say “做个页面”, “新增模块”, “接接口”, “补测试”, or “搭前端项目”.
+description: Guide and implement frontend work in a repository-agnostic way: analyze the existing frontend stack, extend pages/components/routes/state/api layers, add validation, add or adapt mock support, and verify changes without assuming a specific framework or folder layout. Use this whenever the user asks for frontend feature work, page/module scaffolding, API wiring, UI behavior changes, frontend validation, or mock-assisted development in the current repository.
 ---
 
 # Skill: Frontend development
 
 ## Purpose
 
-Implement or guide frontend work in this repository while preserving the existing stack, directory structure, coding style, and validation habits.
-
-## Repository context
-
-This project is not a blank-slate frontend. It already has strong conventions:
-
-- Framework: Vue 3 + Vite 2
-- UI stack: Element Plus, Avue, `@saber/nf-design-base-elp`
-- Routing: Vue Router 4 with dynamic menu formatting through `src/router/avue-router.js`
-- State: Vuex modules under `src/store/modules`
-- I18n: `src/lang`
-- HTTP layer: centralized Axios wrapper in `src/axios.js`
-- Main feature style: config-driven CRUD and forms with `avue-crud` / `avue-form`
-- Common feature layout: `src/views/<domain>/<feature>/index.vue`, `form.vue`, `form.js`, optional `components/`
-- API layout: `src/api/<domain>/<feature>.js`
+Implement or guide frontend work while first learning the target repository's actual stack, structure, patterns, and validation workflow instead of assuming a specific framework or architecture.
 
 ## Use this skill when
 
-Use this skill aggressively whenever the task is primarily frontend-facing, especially if the user wants to:
+Use this skill whenever the task is primarily frontend-facing, especially if the user wants to:
 
-- create a new page, module, component, dialog, form, table, or CRUD flow
-- extend an existing Vue feature under `src/views`
-- add or modify API integration under `src/api`
-- follow this repo's Avue + Element Plus patterns
-- wire permissions, route entry points, or shared business components
-- add mock-driven verification or explain how to validate frontend work
-- plan a new frontend module or subproject while staying aligned with the current repository
+- create or extend a page, module, component, dialog, form, table, or CRUD flow
+- wire frontend code to backend APIs
+- add client-side validation or interaction logic
+- scaffold frontend files in an existing application
+- continue frontend work while backend delivery is incomplete
+- add or extend mock support for frontend verification
 
 ## Do not use this skill for
 
-- backend service creation or database/model changes
-- auth or permission model redesign
-- introducing a new framework, UI kit, or testing stack without user approval
-- broad architecture migrations unrelated to the requested feature
+- backend service creation or database/model design
+- infrastructure, deployment, or DevOps work unrelated to frontend behavior
+- introducing a new framework or major architecture migration without user approval
 
-## Inputs to gather first
+## First-step workflow
 
-Before coding, identify as many of these as possible from the repo and the user request:
+Before coding, always inspect the repository and determine:
 
-- target business domain and feature path
-- existing page or module to mirror
-- relevant API endpoints and request/response fields
-- whether the change is list page, detail page, form flow, approval flow, or shared component work
-- permission points or button visibility rules
-- whether mock mode or real backend should be used for validation
+1. framework and build tool
+2. routing approach
+3. state management approach
+4. HTTP/request layer
+5. UI/component library and styling approach
+6. page/module/file organization
+7. existing validation, lint, typecheck, test, and build commands
+8. whether the request should use real backend APIs or mock data
 
-If a critical product decision is missing, ask the user targeted questions before implementation.
+If requirements are ambiguous, ask focused questions before implementation.
 
-## Repo-specific conventions to preserve
+## Core implementation principles
 
-### Mock-first development when backend is unavailable
+### 0. Promote project-specific frontend skills when useful
 
-This repository now has a project-level API interception mock for the audit-management domain.
+When repository analysis reveals stable, repeatable frontend conventions, treat part of the job as extracting those conventions into a project-level skill.
 
-- Mock definitions live in `mock/audit.js`
-- Mock registration is wired through `src/mockProdServer.js`
-- Mock enablement is controlled in `vite/plugins/setup-mock.js`
-- Dev proxy switching is controlled in `vite.config.js`
-- Use `npm run mock` to start the app in mock mode (`VITE_APP_ENV=mock`)
+Typical signals include:
 
-When the user explicitly asks for mock data, says the backend is unavailable, or asks to continue frontend development before backend delivery, prefer extending this existing interception-based mock instead of inventing a second mock mechanism.
+- a clearly repeated page/module structure
+- a stable request/API layer pattern
+- consistent routing/state/permission conventions
+- an established mock strategy
+- repeated validation/build workflows
+- domain-specific CRUD or form patterns that would otherwise need to be re-explained
 
-Mock implementation rules:
+When these signals exist, the skill should:
 
-1. Add or update handlers in `mock/audit.js` for the affected endpoints.
-2. Match the real frontend-consumed response shape from `src/api/**` and the touched `src/views/**` files.
-3. Reuse the existing success envelope style (`code`, `success`, `msg`, `data`) where the page expects it.
-4. Keep mock data focused on the user flow being built; do not attempt a fake full backend unless required.
-5. If the feature belongs outside audit-management, first verify whether it should extend this mock file or use the existing non-audit mock files under `mock/`.
+1. summarize the repository-specific frontend conventions
+2. propose or generate a project skill that captures them
+3. keep the generic guidance in this skill repository-agnostic
+4. move concrete paths, commands, mock files, domain rules, and framework-specific conventions into the project skill
 
-### 1. File placement
+The generated project skill should usually contain:
 
-- Put feature pages under `src/views/<domain>/<feature>/`
-- Mirror backend wrappers under `src/api/<domain>/<feature>.js`
-- Put reusable cross-feature components under `src/components/`
-- Put domain-specific reusable pieces under that domain's local `components/`
+- when it should trigger
+- repository stack and architecture direction
+- module/file placement direction
+- request/state/routing/permission rules
+- mock strategy and where to extend it
+- project-specific validation entry points
+- guardrails about what not to change
 
-### 2. Page structure
+Project skills should prefer compact direction-setting guidance over static detail dumps. They should answer "what areas matter here" and "where to look first", while leaving exact file inspection to the concrete task.
 
-For business CRUD pages, prefer the existing pattern:
+Generation quality rules for project skills:
 
-- `index.vue`: list/search/table/actions
-- `form.vue`: create/edit/view/approve dialog body
-- `form.js`: Avue form or table option configs
-- optional local helpers/components when the page is too large
+- use repository-native language and business nouns instead of generic placeholders when the domain is clear
+- prefer trigger conditions based on repository/domain identity, not on the current task accidentally touching certain folders
+- capture the 3-6 most distinctive implementation traits of the repo, not an exhaustive list
+- include high-signal architectural behaviors when they are central, such as dynamic menu routing, permission-gated actions, fullscreen dialog workflows, or mock-mode entry points
+- prefer describing the first implementation reference strategy (for example: mirror the nearest existing feature) over listing many concrete files
+- keep sections compact and non-overlapping; project skills should feel like implementation direction, not repository summary
+- avoid repeating the same idea across purpose, use-cases, and workflow sections
+- if a generated project skill reads like a static reference sheet or a broad repository summary, compress it further
 
-### 3. UI implementation style
+### 1. Follow the existing codebase
 
-- Prefer `script setup` and Composition API for feature pages when the surrounding module already uses it
-- Mixed Options API exists in core shell/shared areas; follow the style of the touched file instead of rewriting it
-- Reuse `avue-crud`, `avue-form`, Element Plus dialogs, and existing shared components before writing bespoke UI
-- Use slots to customize Avue-rendered fields and table cells instead of bypassing the pattern prematurely
+- Mirror nearby modules before inventing new patterns.
+- Match the surrounding file structure, naming, imports, and coding style.
+- Reuse existing shared components, utilities, hooks/composables, stores, and API wrappers before creating new ones.
 
-### 4. Routing and state
+### 2. Keep frontend layers aligned
 
-- Respect the router split in `src/router/page` and `src/router/views`
-- Be aware that menu-driven dynamic routes are formatted through `Router.$avueRouter.formatRoutes(...)`
-- Reuse Vuex modules and existing getters/actions instead of inventing parallel state patterns
+When implementing a feature, check whether the work belongs in:
 
-### 5. Permissions and business controls
+- route/page layer
+- reusable component layer
+- API/request layer
+- state/store layer
+- validation or data-mapping helpers
 
-- Button and action visibility commonly depend on `store.state.user.permission.*`
-- Approval, edit, delete, and export operations often have status-based visibility rules
-- Preserve fullscreen dialog workflows where existing modules already use them
+Only touch the layers needed for the requested behavior.
 
-### 6. Imports and formatting
+### 3. Prefer minimal, coherent changes
 
-- Reuse aliases: `@`, `components`, `styles`, `utils`
-- Follow current formatting: single quotes, semicolons, 2-space indentation, concise arrow functions where appropriate
-- Do not add new dependencies unless they already exist in `package.json` or the user approved them
+- Avoid unrelated refactors.
+- Keep feature additions incremental.
+- Preserve current user flows and permissions.
+- Do not silently replace the project's established patterns.
 
-## Default workflow
+### 4. Mock support
 
-### A. Existing-feature development
+If the user explicitly asks for mock data, the backend is unavailable, or frontend work must proceed ahead of backend delivery:
 
-1. Inspect nearby files in the same domain and choose the closest implementation to mirror.
-2. Confirm whether the work belongs in an existing feature folder or needs a new folder under `src/views/<domain>/`.
-3. Add or update the matching API module in `src/api/...`.
-4. Implement list, form, dialog, and slot customizations using Avue/Element Plus patterns already used nearby.
-5. Reuse existing shared components, utilities, dict APIs, and permission guards.
-6. Verify only the touched flow and avoid unrelated refactors.
+- inspect whether the repository already has a mock mechanism
+- extend the existing mock mechanism instead of adding a second one
+- match the exact response shape consumed by the frontend
+- keep mock data focused on the user flow being built
+- verify the feature in mock mode if such a mode exists
 
-### B. New module or page scaffold inside this repo
+### 5. Validation and verification
 
-When the user asks to “create a project/module/page” in this repository, default to this checklist:
+Before completion, discover and run the most relevant existing project checks, such as:
 
-1. Determine the domain directory under `src/views/` and `src/api/`.
-2. Create the minimum feature skeleton needed by the request.
-3. Follow the repo's CRUD/form split if the page is business-data heavy.
-4. Add route integration only where the current architecture expects it.
-5. Keep naming consistent with sibling modules.
-6. If the request implicitly needs backend support that does not exist, stop and surface that dependency.
+- build
+- lint
+- typecheck
+- unit/integration tests
+- mock/dev startup when needed for verification
 
-### C. Entirely new frontend app creation
-
-If the user truly wants a brand-new frontend app rather than a feature inside this repo:
-
-1. First verify that a separate app is actually desired.
-2. Inspect existing stack and ask whether the new app should still use Vue 3 + Vite + Element Plus style conventions.
-3. Do not silently switch to React, Next.js, TypeScript-heavy scaffolds, or a new testing stack just because they are popular.
-4. Prefer consistency with the current repository unless the user explicitly chooses otherwise.
-
-## Testing and verification rules
-
-Always discover available scripts before claiming completion.
-
-In this repository, the currently visible checks are:
-
-- `npm run build`
-- `npm run build:prod`
-- `npm run mock`
-- `npm run dev`
-- `npm run lint` only for staged files through `lint-staged`
-
-Important repo reality:
-
-- There is no dedicated automated unit-test framework visible by default.
-- There is no separate typecheck script.
-- Husky pre-commit exists, but repo-wide lint is not wired as a normal validation command.
-
-So follow this verification policy:
-
-1. Run the most relevant existing validation commands, usually `npm run build`.
-2. If the feature depends on mock data, use `npm run mock` when practical.
-3. If automated tests already exist in the touched area, update and run them.
-4. If no test framework exists, do not introduce Jest/Vitest/Cypress/Playwright unless the user asks for that setup.
-5. When automated tests are absent, provide a short manual verification checklist covering:
-   - happy path
-   - empty/loading/error states when relevant
-   - permission-gated actions
-   - create/edit/view/approve transitions when relevant
+If the repository lacks some of these checks, say so explicitly and provide a short manual verification checklist.
 
 ## Safety and escalation
 
-Stop and ask the user before continuing if:
+Pause and confirm with the user if:
 
-- the feature requires backend contract changes
-- a new dependency or framework is needed but not already installed
-- the request conflicts with existing router, permission, or data-flow architecture
-- the requested validation requires infrastructure not present in the repo
+- the requested frontend change requires backend contract changes
+- a new dependency is needed but not already present
+- the existing architecture strongly conflicts with the request
+- there are multiple valid implementation directions with product trade-offs
 
 ## Completion standard
 
-When using this skill, finish with a concise summary that includes:
+Finish with a concise summary that includes:
 
 - files changed
 - user-visible behavior delivered
-- validation commands run and their results
-- any assumptions, blockers, or follow-up decisions still needed
+- validation commands run and results
+- assumptions or follow-up decisions still needed
+
