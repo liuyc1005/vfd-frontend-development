@@ -57,6 +57,26 @@ If a critical product decision is missing, ask the user targeted questions befor
 
 ## Repo-specific conventions to preserve
 
+### Mock-first development when backend is unavailable
+
+This repository now has a project-level API interception mock for the audit-management domain.
+
+- Mock definitions live in `mock/audit.js`
+- Mock registration is wired through `src/mockProdServer.js`
+- Mock enablement is controlled in `vite/plugins/setup-mock.js`
+- Dev proxy switching is controlled in `vite.config.js`
+- Use `npm run mock` to start the app in mock mode (`VITE_APP_ENV=mock`)
+
+When the user explicitly asks for mock data, says the backend is unavailable, or asks to continue frontend development before backend delivery, prefer extending this existing interception-based mock instead of inventing a second mock mechanism.
+
+Mock implementation rules:
+
+1. Add or update handlers in `mock/audit.js` for the affected endpoints.
+2. Match the real frontend-consumed response shape from `src/api/**` and the touched `src/views/**` files.
+3. Reuse the existing success envelope style (`code`, `success`, `msg`, `data`) where the page expects it.
+4. Keep mock data focused on the user flow being built; do not attempt a fake full backend unless required.
+5. If the feature belongs outside audit-management, first verify whether it should extend this mock file or use the existing non-audit mock files under `mock/`.
+
 ### 1. File placement
 
 - Put feature pages under `src/views/<domain>/<feature>/`
