@@ -1,0 +1,23 @@
+{
+  "skill_name": "frontend-development",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "请在这个项目里新增一个‘合同变更管理’模块，放在 aduit-management 下，页面要沿用现有列表 + 全屏表单弹窗模式，接入现有合同相关接口风格，并给出应如何验证。",
+      "expected_output": "The agent should inspect existing aduit-management examples, scaffold files under src/views/aduit-management and src/api/aduit-management, follow Avue CRUD/form conventions, preserve permission-based actions, and run or recommend the repository's available validation commands.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "帮我给一个已有审批页面补一个导出按钮和状态筛选，要求遵循当前项目的权限控制方式，并说明需要改哪些文件。",
+      "expected_output": "The agent should reuse existing list-page patterns, check store.state.user.permission usage, update the relevant Avue CRUD config and action area, avoid unrelated rewrites, and summarize concrete changed files plus verification steps.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我要在这个仓库里开始一个新的前端业务模块，先别直接写代码，先告诉我应该怎么按现有技术栈创建目录、页面、接口层和验证流程。",
+      "expected_output": "The agent should give a repo-specific implementation plan based on Vue 3 + Vite + Element Plus + Avue conventions, identify the expected src/views and src/api layout, mention routing/state considerations, and describe realistic verification steps without inventing a nonexistent test stack.",
+      "files": []
+    }
+  ]
+}
