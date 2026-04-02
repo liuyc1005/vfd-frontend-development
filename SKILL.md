@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: Guide and implement frontend work in a repository-agnostic way: analyze the existing frontend stack, extend pages/components/routes/state/api layers, add validation, add or adapt mock support, and verify changes without assuming a specific framework or folder layout. Use this whenever the user asks for frontend feature work, page/module scaffolding, API wiring, UI behavior changes, frontend validation, or mock-assisted development in the current repository.
+description: "Guide and implement frontend work in a repository-agnostic way: analyze the existing frontend stack, extend pages/components/routes/state/api layers, add validation, add or adapt mock support, and verify changes without assuming a specific framework or folder layout. Use this whenever the user asks for frontend feature work, page/module scaffolding, API wiring, UI behavior changes, frontend validation, or mock-assisted development in the current repository."
 ---
 
 # Skill: Frontend development
